@@ -3,14 +3,18 @@ package br.com.cursojsf;
 import java.util.List;
 
 import javax.faces.model.SelectItem;
+import javax.persistence.EntityManager;
 
 import org.junit.Test;
 
 import br.com.dao.DaoGeneric;
 import br.com.entidades.Estados;
+import br.com.entidades.Lancamento;
 import br.com.entidades.Pessoa;
 import br.com.entidades.TelefoneUser;
 import br.com.hibernate.HibernateUtil;
+import br.com.repository.IDaoLancamento;
+import br.com.repository.IDaoLancamentoImpl;
 import br.com.repository.IDaoPessoaImpl;
 
 public class AppTest {
@@ -243,6 +247,26 @@ public class AppTest {
 			System.out.println(selectItem.getLabel());
 		}
 		
+		
+	}
+	
+	@Test
+	public void testaBuscaLimitada() {
+		
+		HibernateUtil hibernateUtil = new HibernateUtil();
+		
+		EntityManager entityManager = hibernateUtil.getEntityManager();
+		
+		List<Lancamento> lista = null;
+		
+		
+		Long codUser = 1L;
+		
+		lista =  entityManager.createQuery("from Lancamento where usuario.id = " + codUser + "order by id desc").setMaxResults(1).getResultList();
+		
+		for (Lancamento lancamento : lista) {
+			System.out.println(lancamento);
+		}
 		
 	}
 

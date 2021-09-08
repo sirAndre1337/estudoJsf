@@ -72,7 +72,7 @@ public class LancamentoBean implements Serializable{
 		Pessoa pessoaConsultado = (Pessoa) externalContext.getSessionMap().get("usuarioLogado");
 		
 
-		lancamentos = daoLancamentoImpl.consultar(pessoaConsultado.getId());
+		lancamentos = daoLancamentoImpl.consultarLimite10(pessoaConsultado.getId());
 		
 	}
 
