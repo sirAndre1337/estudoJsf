@@ -1,15 +1,25 @@
 package br.com.dao;
 
+import java.io.Serializable;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
 import br.com.hibernate.HibernateUtil;
 
-public class DaoGeneric<E> {
+@Named
+public class DaoGeneric<E> implements Serializable{
 
-	private EntityManager entityManager = HibernateUtil.getEntityManager();
+	private static final long serialVersionUID = 1L;
+
+	@Inject
+	private EntityManager entityManager;
+	
+	@Inject
+	private HibernateUtil hibernateUtil;
 
 	public void salvar(E entidade) {
 
@@ -49,7 +59,7 @@ public class DaoGeneric<E> {
 
 	public void deletarPoridComQuery(E entidade) {
 
-		Object id = HibernateUtil.getPrimaryKey(entidade);
+		Object id = hibernateUtil.getPrimaryKey(entidade);
 
 		EntityTransaction transaction = entityManager.getTransaction();
 		transaction.begin();

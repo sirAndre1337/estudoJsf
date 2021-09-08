@@ -2,19 +2,20 @@ package br.com.converter;
 
 import java.io.Serializable;
 
+import javax.enterprise.inject.spi.CDI;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import javax.persistence.EntityManager;
 
 import br.com.entidades.Cidades;
-import br.com.entidades.Estados;
-import br.com.hibernate.HibernateUtil;
 
 @FacesConverter(forClass = Cidades.class, value = "cidadeConverter")
 public class CidadeConverter implements Converter, Serializable {
 
 	private static final long serialVersionUID = 1L;
+	
 
 	@Override // Retorna obj inteiro
 	public Object getAsObject(FacesContext context, UIComponent component, String codigoCidade) {
@@ -22,8 +23,10 @@ public class CidadeConverter implements Converter, Serializable {
 		if (codigoCidade.equalsIgnoreCase("--[Selecione]--")) {
 			return null;
 		} else {
-
-			return HibernateUtil.getEntityManager().find(Cidades.class, Long.parseLong(codigoCidade));
+			
+			EntityManager entityManager = CDI.current().select(EntityManager.class).get();
+			
+			return entityManager.find(Cidades.class, Long.parseLong(codigoCidade));
 		}
 
 	}

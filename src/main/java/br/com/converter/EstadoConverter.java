@@ -2,20 +2,20 @@ package br.com.converter;
 
 import java.io.Serializable;
 
+import javax.enterprise.inject.spi.CDI;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 
 import br.com.entidades.Estados;
-import br.com.hibernate.HibernateUtil;
 
 @FacesConverter(forClass = Estados.class, value = "estadoConverter")
 public class EstadoConverter implements Converter, Serializable {
 
 	private static final long serialVersionUID = 1L;
+	
 
 	@Override // Retorna obj inteiro
 	public Object getAsObject(FacesContext context, UIComponent component, String codigoEstado) {
@@ -24,12 +24,9 @@ public class EstadoConverter implements Converter, Serializable {
 			return null;
 		} else {
 
-			EntityManager entityManager = HibernateUtil.getEntityManager();
-			EntityTransaction transaction = entityManager.getTransaction();
-			transaction.begin();
+			EntityManager entityManager = CDI.current().select(EntityManager.class).get();
 
-			Estados estados = entityManager.find(Estados.class, Long.parseLong(codigoEstado));
-			return estados;
+			return entityManager.find(Estados.class, Long.parseLong(codigoEstado));
 		}
 	}
 

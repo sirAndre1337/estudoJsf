@@ -232,13 +232,6 @@ public class AppTest {
 
 	}
 	
-	
-	@Test
-	public void testaJPA() {
-		
-		System.out.println(HibernateUtil.getEntityManager().find(Estados.class, 1L));
-	}
-	
 	@Test
 	public void testaBuscarCidades() {
 		

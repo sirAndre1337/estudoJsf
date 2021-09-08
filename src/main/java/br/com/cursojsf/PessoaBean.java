@@ -8,6 +8,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -16,15 +17,16 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
 import javax.faces.component.html.HtmlSelectOneMenu;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
+import javax.faces.view.ViewScoped;
 import javax.imageio.ImageIO;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import javax.xml.bind.DatatypeConverter;
@@ -34,17 +36,22 @@ import com.google.gson.Gson;
 import br.com.dao.DaoGeneric;
 import br.com.entidades.Estados;
 import br.com.entidades.Pessoa;
-import br.com.repository.IDaoPessoaImpl;
+import br.com.repository.IDaoPessoa;
 
 @ViewScoped
-@ManagedBean(name = "pessoaBean")
-public class PessoaBean {
+@Named(value = "pessoaBean")
+public class PessoaBean implements Serializable{
 
+	private static final long serialVersionUID = 1L;
+		
 	private Pessoa pessoa = new Pessoa();
 	private List<Pessoa> pessoas = new ArrayList<Pessoa>();
 
-	private DaoGeneric<Pessoa> dao = new DaoGeneric<Pessoa>();
-	private IDaoPessoaImpl iDaoPessoaImpl = new IDaoPessoaImpl();
+	@Inject
+	private DaoGeneric<Pessoa> dao;
+	
+	@Inject
+	private IDaoPessoa iDaoPessoaImpl;
 
 	private List<SelectItem> estados;
 	
