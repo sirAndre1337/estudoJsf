@@ -97,6 +97,15 @@ public class PessoaBean implements Serializable{
 		
 		pessoa = dao.atualizarOuSalva(pessoa);
 		pesquisar();
+		
+
+		if (pessoa.getCidades() != null) {
+			Estados estado = pessoa.getCidades().getEstado();
+			pessoa.setEstados(estado);
+			setCidades(iDaoPessoaImpl.listaCidades(estado.getId()));
+		}
+		
+		
 		messagens("Cadastrado com sucesso");
 		return "";
 	}
@@ -247,7 +256,7 @@ public class PessoaBean implements Serializable{
 
 	}
 	
-	public void editar() {
+	public String editar() {
 		
 		if (pessoa.getCidades() != null) {
 			Estados estado = pessoa.getCidades().getEstado();
@@ -255,7 +264,7 @@ public class PessoaBean implements Serializable{
 			
 			setCidades(iDaoPessoaImpl.listaCidades(estado.getId()));
 		}
-		
+		return "";
 	}
 	
 	

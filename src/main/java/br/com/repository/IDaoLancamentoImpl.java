@@ -22,7 +22,6 @@ public class IDaoLancamentoImpl implements IDaoLancamento , Serializable{
 		List<Lancamento> lista = null;
 		
 		EntityTransaction transaction = entityManager.getTransaction();
-		transaction.begin();
 		
 		lista =  entityManager.createQuery("from Lancamento where usuario.id = " + codUser).getResultList();
 		
