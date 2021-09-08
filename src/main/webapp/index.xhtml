@@ -13,16 +13,19 @@
 
 <h:body>
 	<h:form id="formLogin" style="margin-top:22%; margin-left:40%;">
+	
+	
 	<h2>Login no sistema</h2>
 		<h:panelGrid columns="2">
 			<h:outputLabel value="Login : "/>
-			<h:inputText value="#{pessoaBean.pessoa.login}"/>
+			<h:inputText value="#{pessoaBean.pessoa.login}" required="true" requiredMessage="Informe o login."/>
 			
 			<h:outputLabel value="Senha : "/>
-			<h:inputSecret value="#{pessoaBean.pessoa.senha}"/>
+			<h:inputSecret value="#{pessoaBean.pessoa.senha}" required="true" requiredMessage="Informe a senha."/>
 			
 			<h:commandButton value="Acessar" action="#{pessoaBean.logar}"/>
 		</h:panelGrid>
+	<h:messages />
 		
 	</h:form>
 

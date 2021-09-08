@@ -136,7 +136,7 @@ public class PessoaBean implements Serializable{
 
 	public String excluir() {
 
-		dao.deletarPorid(pessoa);
+		dao.deletarPoridComQuery(pessoa);
 		pessoa = new Pessoa();
 		pesquisar();
 		messagens("Excluido com sucesso");
@@ -168,6 +168,7 @@ public class PessoaBean implements Serializable{
 		Pessoa pessoaConsultada = iDaoPessoaImpl.consultarUsuario(pessoa.getLogin(), pessoa.getSenha());
 
 		if (pessoaConsultada == null) {
+			messagens("Login ou senha incorretos.");
 			return "index.xhtml";
 		} else {
 

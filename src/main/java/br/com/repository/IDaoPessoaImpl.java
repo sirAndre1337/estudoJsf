@@ -12,57 +12,58 @@ import javax.persistence.EntityManager;
 import br.com.entidades.Cidades;
 import br.com.entidades.Estados;
 import br.com.entidades.Pessoa;
-import br.com.hibernate.HibernateUtil;
 
 @Named
-public class IDaoPessoaImpl implements IDaoPessoa , Serializable{
+public class IDaoPessoaImpl implements IDaoPessoa, Serializable {
 
+	private static final long serialVersionUID = 1L;
 	@Inject
 	private EntityManager entityManager;
-	
+
 	@Override
 	public Pessoa consultarUsuario(String login, String senha) {
-		
+
 		Pessoa pessoa = null;
-		
-		
-		 pessoa = (Pessoa) entityManager.createQuery("select p from Pessoa p where p.login = :login and p.senha = :senha")
-		.setParameter("login", login)
-		.setParameter("senha", senha).getSingleResult();
+
+		try {
+			pessoa = (Pessoa) entityManager
+					.createQuery("select p from Pessoa p where p.login = :login and p.senha = :senha")
+					.setParameter("login", login).setParameter("senha", senha).getSingleResult();
+
+		} catch (javax.persistence.NoResultException e) { 
+			// se nao encontra o usuario com login e senha no bd
+		}
 		
 		return pessoa;
 	}
 
 	@Override
 	public List<SelectItem> listaEstados() {
-		
+
 		List<SelectItem> selectItems = new ArrayList<SelectItem>();
-		
-		List<Estados> estados =  entityManager.createQuery("from Estados").getResultList();
-		
+
+		List<Estados> estados = entityManager.createQuery("from Estados").getResultList();
+
 		for (Estados estado : estados) {
-			selectItems.add(new SelectItem(estado , estado.getNome()));
+			selectItems.add(new SelectItem(estado, estado.getNome()));
 		}
-		
+
 		return selectItems;
 	}
 
 	@Override
 	public List<SelectItem> listaCidades(Long idEstado) {
-		
+
 		List<SelectItem> selectItems = new ArrayList<SelectItem>();
-		
+
 		List<Cidades> cidades = entityManager.createQuery("from Cidades where estados.id = :id ")
-		.setParameter("id", idEstado)
-		.getResultList();
-		
+				.setParameter("id", idEstado).getResultList();
+
 		for (Cidades cidade : cidades) {
-			selectItems.add(new SelectItem(cidade , cidade.getNome()));
+			selectItems.add(new SelectItem(cidade, cidade.getNome()));
 		}
-		
+
 		return selectItems;
 	}
-	
-	
 
 }
