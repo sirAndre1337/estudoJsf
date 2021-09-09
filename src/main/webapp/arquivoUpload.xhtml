@@ -32,6 +32,24 @@
 
 	</h:form>
 	
+	<h:form id="formArquivoSalvo">
+		<h:dataTable value="#{arquivoUploadBean.listaArquivoSalvos}" var="arq" width="100%">
+			<h:column>
+			<h:outputLabel value="#{arq.id}"/>
+			</h:column>
+			
+			<h:column>
+			<h:outputLabel value="#{arq.descricao}"/>
+			</h:column>
+			
+			<h:column>
+			<h:commandLink value="Download" actionListener="#{arquivoUploadBean.download}">
+				<f:param name="fileDownloadId" value="#{arq.id}"/>
+			</h:commandLink>
+			</h:column>
+		</h:dataTable>
+	</h:form>
+	
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
 </h:body>

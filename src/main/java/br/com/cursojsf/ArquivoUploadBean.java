@@ -4,12 +4,17 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
+import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
 import br.com.dao.DaoGeneric;
@@ -25,6 +30,8 @@ public class ArquivoUploadBean implements Serializable{
 	private ArquivoUpload arquivoUpload = new ArquivoUpload();
 	
 	private Part arquivo;
+	
+	private List<ArquivoUpload> listaArquivoSalvos = new ArrayList<ArquivoUpload>();
 	
 	@Inject
 	private IDaoArquivoUpload iDaoArquivoUpload;
@@ -43,16 +50,36 @@ public class ArquivoUploadBean implements Serializable{
 		arquivoUpload.setUsuario(usuarioLogado);
 		iDaoArquivoUpload.salvar(arquivoUpload);
 		
-		Scanner conteudo = new Scanner(arquivo.getInputStream());
-		
-		while (conteudo.hasNext()) {
-				System.out.println(conteudo.next());
-		}
-		
+		carregarArquivosSalvos();
 		
 		return "";
 	}
 	
+	@PostConstruct
+	private void carregarArquivosSalvos() {
+		
+		listaArquivoSalvos = iDaoArquivoUpload.carregarArquivosSalvos();
+		
+	}
+	
+	public void download() throws IOException {
+		
+		Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+		String fileDownloadId = params.get("fileDownloadId");
+		
+		ArquivoUpload arquivoRetornado  = iDaoArquivoUpload.buscarArquivo(fileDownloadId);
+		
+		HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+		
+		response.addHeader("Content-Disposition" , "attachment; filename=download.csv");
+		response.setContentType("application/octet-stream");
+		response.setContentLength(arquivoRetornado.getArquivo().length);
+		response.getOutputStream().write(arquivoRetornado.getArquivo());
+		response.getOutputStream().flush();
+		FacesContext.getCurrentInstance().responseComplete();
+		
+	}
+
 	public String upload() throws IOException {
 		
 		// Lendo arquivo em CSV --------
@@ -70,7 +97,6 @@ public class ArquivoUploadBean implements Serializable{
 						
 						if (!linha.equalsIgnoreCase(";")) {
 						String[] dados = linha.split("\\;"); // onde tem a virgula ele quebra
-						System.out.println("Nome :" + dados[0] + " Email : "+ dados[1]);
 						
 						Pessoa p = new Pessoa();
 						p.setNome(dados[0]);
@@ -84,9 +110,9 @@ public class ArquivoUploadBean implements Serializable{
 					}
 					
 				}
+				salvar();
 				
 				return "";
-		
 	}
 	
 	// Pega o arquivo e transforma em byte
@@ -114,6 +140,11 @@ public class ArquivoUploadBean implements Serializable{
 
 	public void setArquivo(Part arquivo) {
 		this.arquivo = arquivo;
+	}
+
+	
+	public List<ArquivoUpload> getListaArquivoSalvos() {
+		return listaArquivoSalvos;
 	}
 	
 	

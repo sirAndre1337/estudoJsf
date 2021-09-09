@@ -1,6 +1,7 @@
 package br.com.repository;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -23,6 +24,19 @@ public class IDaoArquivoUploadImpl implements IDaoArquivoUpload , Serializable{
 		transaction.begin();
 		entityManager.persist(arquivoUpload);
 		transaction.commit();
+	}
+
+	@Override
+	public List<ArquivoUpload> carregarArquivosSalvos() {
+		
+		return entityManager.createQuery("from ArquivoUpload").getResultList();
+		
+	}
+
+	@Override
+	public ArquivoUpload buscarArquivo(String id) {
+		
+		return entityManager.find(ArquivoUpload.class,Long.parseLong(id));
 	}
 
 }
