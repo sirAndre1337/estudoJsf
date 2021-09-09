@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:b="http://bootsfaces.net/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+
+<h:head>
+	<title>Arquivo Upload</title>
+</h:head>
+
+
+<h:body>
+
+	<ui:include src="/menu.xhtml" />
+	
+	<h:form id="formArquivoUpload"  enctype="multipart/form-data">
+			
+			<b:label value="Descricao :"/>
+			<b:inputText value="#{arquivoUploadBean.arquivoUpload.descricao}"/>
+			
+			<h:inputFile value="#{arquivoUploadBean.arquivo}" />
+			
+			
+			
+			<h:commandButton value="Salvar Arquivo" action="#{arquivoUploadBean.salvar}"/>
+
+
+	</h:form>
+	
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+</h:body>
+
+</html>
