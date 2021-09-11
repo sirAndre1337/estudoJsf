@@ -31,6 +31,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import javax.xml.bind.DatatypeConverter;
 
+import org.primefaces.model.chart.BarChartModel;
+import org.primefaces.model.chart.ChartSeries;
+
 import com.google.gson.Gson;
 
 import br.com.dao.DaoGeneric;
@@ -46,6 +49,11 @@ public class PessoaBean implements Serializable{
 		
 	private Pessoa pessoa = new Pessoa();
 	private List<Pessoa> pessoas = new ArrayList<Pessoa>();
+	private BarChartModel barChartModel = new BarChartModel();
+
+	public BarChartModel getBarChartModel() {
+		return barChartModel;
+	}
 
 	@Inject
 	private DaoGeneric<Pessoa> dao;
@@ -146,7 +154,18 @@ public class PessoaBean implements Serializable{
 
 	@PostConstruct
 	public void pesquisar() {
-
+		
+		ChartSeries medida = new ChartSeries();
+		medida.setLabel("Users");
+		
+		for (Pessoa pes : pessoas) {
+			
+			medida.set(pes.getNome(), pes.getIdade());
+		}
+		
+		barChartModel.addSeries(medida);
+		barChartModel.setTitle("Grafico de salarios");
+		
 		pessoas = dao.buscaTodos(Pessoa.class);
 
 	}
