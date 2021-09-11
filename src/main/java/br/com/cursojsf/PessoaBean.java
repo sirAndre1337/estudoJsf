@@ -154,6 +154,7 @@ public class PessoaBean implements Serializable{
 
 	@PostConstruct
 	public void pesquisar() {
+		pessoas = dao.buscaTodos(Pessoa.class);
 		
 		ChartSeries medida = new ChartSeries();
 		medida.setLabel("Users");
@@ -166,7 +167,6 @@ public class PessoaBean implements Serializable{
 		barChartModel.addSeries(medida);
 		barChartModel.setTitle("Grafico de salarios");
 		
-		pessoas = dao.buscaTodos(Pessoa.class);
 
 	}
 
